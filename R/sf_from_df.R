@@ -18,12 +18,15 @@
 #' 
 #' @param geometry_name What variable name should the geometry variable take? 
 #' 
+#' @param verbose Should the function give messages? 
+#' 
 #' @return A \strong{sf} spatial object. 
 #' 
 #' @export
 sf_from_df <- function(df, geometry_type = "points", 
                        coords = c("longitude", "latitude"), by = NULL, 
-                       crs = sf::st_crs("wgs84"), geometry_name = "geometry") {
+                       crs = sf::st_crs("wgs84"), geometry_name = "geometry",
+                       verbose = TRUE) {
   
   # Check input
   stopifnot(inherits(df, "data.frame"))
@@ -33,6 +36,21 @@ sf_from_df <- function(df, geometry_type = "points",
   geometry_type <- geometry_type %>% 
     stringr::str_to_lower() %>% 
     stringr::str_squish()
+  
+  # Are there missing coordinates? 
+  missing_coordinates <- df %>% 
+    select(!!coords) %>% 
+    anyNA()
+  
+  # If so, remove the missing observations
+  if (missing_coordinates) {
+    if (verbose) {
+      cli::cli_alert_info(
+        "There are missing coordinates, these have been removed..."
+      )
+    }
+    df <- filter(df, !dplyr::if_any(dplyr::all_of(coords), is.na))
+  }
   
   # Promote to points first
   sf <- st_as_sf(

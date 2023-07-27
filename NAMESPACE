@@ -2,7 +2,11 @@
 
 export("%>%")
 export(coords_to_wkt)
+export(crs_swiss)
+export(crs_swiss_plus)
+export(crs_wgs_84)
 export(sf_from_df)
+export(sf_to_df)
 import(sf)
 importFrom(dplyr,across)
 importFrom(dplyr,arrange)

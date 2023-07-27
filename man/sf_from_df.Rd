@@ -10,7 +10,8 @@ sf_from_df(
   coords = c("longitude", "latitude"),
   by = NULL,
   crs = sf::st_crs("wgs84"),
-  geometry_name = "geometry"
+  geometry_name = "geometry",
+  verbose = TRUE
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ coordinates (in that order).}
 in?}
 
 \item{geometry_name}{What variable name should the geometry variable take?}
+
+\item{verbose}{Should the function give messages?}
 }
 \value{
 A \strong{sf} spatial object.
