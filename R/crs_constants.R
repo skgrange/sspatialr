@@ -1,6 +1,8 @@
-#' Built in projection constants. 
+#' Built-in projection/coordinate reference system constants. 
 #' 
 #' @author Stuart K. Grange
+#' 
+#' @seealso [func(st_crs)]
 #' 
 #' @return Integer with length of \code{1}.
 #' 
@@ -16,3 +18,8 @@ crs_swiss <- 21781L
 #' @rdname crs_wgs_84
 #' @export
 crs_swiss_plus <- 2056L
+
+
+#' @rdname crs_wgs_84
+#' @export
+crs_bng <- 27700L

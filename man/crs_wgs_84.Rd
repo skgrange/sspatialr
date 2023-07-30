@@ -5,8 +5,11 @@
 \alias{crs_wgs_84}
 \alias{crs_swiss}
 \alias{crs_swiss_plus}
-\title{Built in projection constants.}
+\alias{crs_bng}
+\title{Built-in projection/coordinate reference system constants.}
 \format{
+An object of class \code{integer} of length 1.
+
 An object of class \code{integer} of length 1.
 
 An object of class \code{integer} of length 1.
@@ -19,12 +22,17 @@ crs_wgs_84
 crs_swiss
 
 crs_swiss_plus
+
+crs_bng
 }
 \value{
 Integer with length of \code{1}.
 }
 \description{
-Built in projection constants.
+Built-in projection/coordinate reference system constants.
+}
+\seealso{
+[func(st_crs)]
 }
 \author{
 Stuart K. Grange
