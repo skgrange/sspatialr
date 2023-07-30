@@ -4,10 +4,12 @@
 \alias{plot_sf_leaflet}
 \title{Function to plot spatial objects with an interactive \strong{leaflet} plot.}
 \usage{
-plot_sf_leaflet(sf, transform = TRUE)
+plot_sf_leaflet(sf, popup = TRUE, transform = TRUE)
 }
 \arguments{
 \item{sf}{A \strong{sf} spatial object.}
+
+\item{popup}{Should interactive popups be included in the map if possible?}
 
 \item{transform}{Should the projection system be transformed to WGS84 before
 plotting?}
