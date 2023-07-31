@@ -7,19 +7,24 @@
 #' @return Integer with length of \code{1}.
 #' 
 #' @export
-crs_wgs_84 <- 4326L
+crs_wgs84 <- 4326L
 
 
-#' @rdname crs_wgs_84
+#' @rdname crs_wgs84
 #' @export
 crs_swiss <- 21781L
 
 
-#' @rdname crs_wgs_84
+#' @rdname crs_wgs84
 #' @export
 crs_swiss_plus <- 2056L
 
 
-#' @rdname crs_wgs_84
+#' @rdname crs_wgs84
 #' @export
 crs_bng <- 27700L
+
+
+#' @rdname crs_wgs84
+#' @export
+crs_nztm <- 2193L

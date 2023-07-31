@@ -16,7 +16,7 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
   
   # Transform projection system
   if (transform) {
-    sf <- sf::st_transform(sf, crs = crs_wgs_84)
+    sf <- sf::st_transform(sf, crs = crs_wgs84)
   }
   
   # Build a popup object 
@@ -48,7 +48,7 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
     plot <- leaflet::addCircleMarkers(plot, popup = popup_object)
   } else if (sf_class(sf) == "linestring") {
     plot <- leaflet::addPolylines(plot, popup = popup_object)
-  } else if (sf_class(sf) == "polygon") {
+  } else if (sf_class(sf) %in% c("polygon", "multipolygon")) {
     plot <- leaflet::addPolygons(plot, popup = popup_object)
   }
   

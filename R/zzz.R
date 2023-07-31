@@ -6,7 +6,7 @@ if (getRversion() >= "2.15.1") {
   
   # What variables are causing issues?
   variables <- c(
-    "rowid"
+    ".", "rowid", "time", "distance", "time_lag", "latitude", "longitude"
   )
   
   # Squash the notes
