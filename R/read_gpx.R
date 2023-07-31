@@ -23,6 +23,7 @@ read_gpx <- function(file, transform = TRUE, creator = FALSE, verbose = FALSE,
   file %>% 
     purrr::map(
       ~read_gpx_worker(
+        file = .,
         transform = transform, 
         creator = creator,
         verbose = verbose 
