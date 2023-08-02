@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_osm_boundary.R
 \name{get_osm_boundary}
 \alias{get_osm_boundary}
-\title{Function to get OpenStreetMap boundaries as}
+\title{Function to get OpenStreetMap boundaries as \strong{sf} polygons.}
 \usage{
 get_osm_boundary(id, sleep = 1, verbose = FALSE, progress = FALSE)
 }

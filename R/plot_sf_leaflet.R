@@ -43,7 +43,7 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
     leaflet::leaflet() %>% 
     leaflet::addTiles()
   
-  # Add the specific layers
+  # Add the specific layers based on the geometry type
   if (sf_class(sf) == "point") {
     plot <- leaflet::addCircleMarkers(plot, popup = popup_object)
   } else if (sf_class(sf) == "linestring") {

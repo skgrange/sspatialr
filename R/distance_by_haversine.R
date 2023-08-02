@@ -21,15 +21,12 @@
 #' 
 #' @param latitude_lag A vector of latitude values in decimal degrees.
 #' 
-#' @param unit The unit of the returned distance values. Can be metres or 
-#' kilometres. Metres is the default. 
-#' 
-#' @param radius The radius of the Earth in kilometres. The default value is
-#' 6371. 
+#' @param radius The radius of the Earth in kilometres. The default value is 
+#' 6 371 000 m (6371 km). 
 #' 
 #' @author Stuart K. Grange
 #' 
-#' @return Numeric vector.
+#' @return Numeric vector representing distance in metres
 #' 
 #' @examples
 #' 
@@ -39,14 +36,9 @@
 #' 
 #' @export
 distance_by_haversine <- function(latitude, longitude, latitude_lag = NA, 
-                                  longitude_lag = NA, unit = "metres", 
-                                  radius = 6371) {
-  # Switch units, a check
-  unit <- switch(unit, 
-    "m" =, "meter" =, "metre" =, "metres" =, "meters" = "meters",
-    "km" =, "kilometer" =, "kilometre" =, "kilometers" =, "kilometres" = "kilometres")
+                                  longitude_lag = NA, radius = 6371 * 1000) {
   
-  # Create lagged variables if not declared
+  # Calculate lagged variables if not used
   if (is.na(latitude_lag) & is.na(longitude_lag)) {
     latitude_lag <- dplyr::lag(latitude, 1)
     longitude_lag <- dplyr::lag(longitude, 1)
@@ -64,11 +56,8 @@ distance_by_haversine <- function(latitude, longitude, latitude_lag = NA,
   # Calculate distance
   distance <- 2 * atan2(sqrt(haversin), sqrt(1 - haversin))
   
-  # Calculate distance as metres
+  # Calculate distance in metres
   distance <- radius * distance
-  
-  # Convert unit system
-  if (unit == "meters") distance <- distance * 1000
   
   return(distance)
   

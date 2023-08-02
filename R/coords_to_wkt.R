@@ -8,7 +8,7 @@
 #' @param y \code{y}/latitude numeric vector. 
 #' 
 #' @param geometry_type Type of geometry to create. Only \code{"points"} are 
-#' supported. 
+#' supported.
 #' 
 #' @param round Decimal points to round \code{x} and \code{y} vectors. 
 #' 

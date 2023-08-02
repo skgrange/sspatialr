@@ -1,4 +1,5 @@
-#' Function to transform a \strong{sf} spatial object to a data frame/tibble.
+#' Function to transform a \strong{sf} spatial object to a "long" data 
+#' frame/tibble.
 #' 
 #' @author Stuart K. Grange
 #' 
@@ -18,6 +19,7 @@ sf_to_df <- function(sf) {
     sf::st_coordinates() %>% 
     as_tibble()
   
+  # Give names to coordinate variables
   if (ncol(df_coordinates) == 2L) {
     df_coordinates <- purrr::set_names(df_coordinates, c("x", "y"))
   } else if (ncol(df_coordinates) == 3L) {
@@ -26,6 +28,7 @@ sf_to_df <- function(sf) {
     stop("Too many columns.", call. = FALSE)
   }
   
+  # Bind or join the non-spatial variables with coordinates
   if (ncol(df_coordinates) == 2L) {
     # Bind the two types of variables
     df <- dplyr::bind_cols(df_non_spatial, df_coordinates)  

@@ -1,4 +1,4 @@
-#' Function to plot spatial objects with an interactive \strong{leaflet} plot. 
+#' Function to plot spatial objects with an interactive \strong{leaflet} plot.
 #' 
 #' @author Stuart K. Grange
 #' 

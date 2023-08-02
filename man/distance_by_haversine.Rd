@@ -9,8 +9,7 @@ distance_by_haversine(
   longitude,
   latitude_lag = NA,
   longitude_lag = NA,
-  unit = "metres",
-  radius = 6371
+  radius = 6371 * 1000
 )
 }
 \arguments{
@@ -22,14 +21,11 @@ distance_by_haversine(
 
 \item{longitude_lag}{A vector of longitude values in decimal degrees.}
 
-\item{unit}{The unit of the returned distance values. Can be metres or 
-kilometres. Metres is the default.}
-
-\item{radius}{The radius of the Earth in kilometres. The default value is
-6371.}
+\item{radius}{The radius of the Earth in kilometres. The default value is 
+6 371 000 m (6371 km).}
 }
 \value{
-Numeric vector.
+Numeric vector representing distance in metres
 }
 \description{
 \code{distance_by_haversine} is used when distances between latitude and 

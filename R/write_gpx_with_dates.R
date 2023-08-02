@@ -1,12 +1,12 @@
 #' Function to export GPX files with a \code{time} (date) variable. 
 #' 
+#' @author Stuart K. Grange
+#' 
 #' @param df Data frame or tibble with at least these three variables: 
 #' \code{latitude}, \code{longitude}, and \code{date}. \code{date} also needs 
 #' to be of \code{POSIXct} type.
 #' 
 #' @param file File name of GPX export. 
-#' 
-#' @author Stuart K. Grange
 #' 
 #' @return Invisible GPX mark-up.
 #' 
@@ -37,7 +37,8 @@ write_gpx_with_dates <- function(df, file) {
   # Combine the different pieces
   gpx_complete <- stringr::str_c(gpx_preamble_tags, gpx_body, gpx_trailing_tags)
   
-  # Export to disc
+  # Export to disc, not using readr to avoid a progress bar which is not 
+  # required
   writeLines(gpx_complete, file)
   
   return(invisible(gpx_complete))

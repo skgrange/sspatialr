@@ -11,11 +11,13 @@
 #' @export
 sf_class <- function(sf, as_lower = TRUE) {
   
+  # Get unique geometry classes as a character vector
   x <- sf %>% 
     sf::st_geometry_type() %>% 
     unique() %>% 
     as.character()
   
+  # Make lower case
   if (as_lower) {
     x <- stringr::str_to_lower(x)
   }

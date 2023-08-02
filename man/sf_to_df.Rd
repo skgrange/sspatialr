@@ -2,7 +2,8 @@
 % Please edit documentation in R/sf_to_df.R
 \name{sf_to_df}
 \alias{sf_to_df}
-\title{Function to transform a \strong{sf} spatial object to a data frame/tibble.}
+\title{Function to transform a \strong{sf} spatial object to a "long" data 
+frame/tibble.}
 \usage{
 sf_to_df(sf)
 }
@@ -13,7 +14,8 @@ sf_to_df(sf)
 Tibble.
 }
 \description{
-Function to transform a \strong{sf} spatial object to a data frame/tibble.
+Function to transform a \strong{sf} spatial object to a "long" data 
+frame/tibble.
 }
 \author{
 Stuart K. Grange

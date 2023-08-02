@@ -1,4 +1,4 @@
-#' Function to get OpenStreetMap boundaries as 
+#' Function to get OpenStreetMap boundaries as \strong{sf} polygons.
 #' 
 #' \code{get_osm_boundary} accesses 
 #' \href{http://polygons.openstreetmap.fr/index.py}{this} polygon creator tool. 
@@ -24,7 +24,8 @@
 #' @export
 get_osm_boundary <- function(id, sleep = 1, verbose = FALSE, progress = FALSE) {
   
-  # Do
+  # Do, use bind_rows for sf objects, passing id rather than url because it is
+  # used within the worker
   id %>% 
     purrr::map(
       ~get_osm_boundary_worker(
@@ -39,23 +40,21 @@ get_osm_boundary <- function(id, sleep = 1, verbose = FALSE, progress = FALSE) {
 
 get_osm_boundary_worker <- function(id, sleep, verbose) {
   
+  # Build url
+  url <- glue::glue(
+    "http://polygons.openstreetmap.fr/get_wkt.py?id={id}&params=0"
+  )
+  
   # Message to user
   if (verbose) {
-    cli::cli_alert_info("{threadr::cli_date()} Getting ID `{id}...")
+    cli::cli_alert_info("{threadr::cli_date()} `{url}`...")
   }
-  
-  # Build query
-  url <- stringr::str_c(
-    "http://polygons.openstreetmap.fr/get_wkt.py?id=", 
-    id, 
-    "&params=0"
-  )
   
   # Get wkt
   text <- tryCatch({
     threadr::read_lines(url)
   }, error = function(e) {
-    cli::cli_alert_info("{threadr::cli_date()} `{id}` not returned...")
+    cli::cli_alert_info("{threadr::cli_date()} `{url}` returned no data...")
     NULL
   })
   
