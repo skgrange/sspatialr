@@ -1,4 +1,4 @@
-#' Function to plot spatial objects with an interactive \strong{leaflet} plot.
+#' Function to write a \strong{sf} spatial object to a GPX file. 
 #' 
 #' @author Stuart K. Grange
 #' 

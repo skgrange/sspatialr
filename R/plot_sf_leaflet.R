@@ -44,9 +44,9 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
     leaflet::addTiles()
   
   # Add the specific layers based on the geometry type
-  if (sf_class(sf) == "point") {
+  if (sf_class(sf) %in% c("point", "multipoint")) {
     plot <- leaflet::addCircleMarkers(plot, popup = popup_object)
-  } else if (sf_class(sf) == "linestring") {
+  } else if (sf_class(sf) %in% c("linestring", "multilinestring")) {
     plot <- leaflet::addPolylines(plot, popup = popup_object)
   } else if (sf_class(sf) %in% c("polygon", "multipolygon")) {
     plot <- leaflet::addPolygons(plot, popup = popup_object)

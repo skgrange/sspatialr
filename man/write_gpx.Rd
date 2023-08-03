@@ -2,7 +2,7 @@
 % Please edit documentation in R/write_gpx.R
 \name{write_gpx}
 \alias{write_gpx}
-\title{Function to plot spatial objects with an interactive \strong{leaflet} plot.}
+\title{Function to write a \strong{sf} spatial object to a GPX file.}
 \usage{
 write_gpx(sf, file, transform = FALSE)
 }
@@ -18,7 +18,7 @@ plotting?}
 Invisible \code{file}.
 }
 \description{
-Function to plot spatial objects with an interactive \strong{leaflet} plot.
+Function to write a \strong{sf} spatial object to a GPX file.
 }
 \author{
 Stuart K. Grange
