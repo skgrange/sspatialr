@@ -7,6 +7,9 @@
 #' 
 #' @param creator Should the \code{creator} variable be extracted from the file? 
 #' 
+#' @param names_to An optional variable name for file name in the returned 
+#' tibble.
+#' 
 #' @param verbose Should the function give messages? 
 #'
 #' @param progress Should a progress bar be displayed? 
@@ -16,11 +19,12 @@
 #' @return Tibble. 
 #' 
 #' @export
-read_gpx <- function(file, transform = TRUE, creator = FALSE, verbose = FALSE,
-                     progress = TRUE) {
+read_gpx <- function(file, transform = TRUE, creator = FALSE, 
+                     names_to = rlang::zap(), verbose = FALSE, progress = TRUE) {
   
   # Vectorise function
   file %>% 
+    purrr::set_names(.) %>% 
     purrr::map(
       ~read_gpx_worker(
         file = .,
@@ -30,7 +34,7 @@ read_gpx <- function(file, transform = TRUE, creator = FALSE, verbose = FALSE,
       ),
       .progress = progress
     ) %>% 
-    purrr::list_rbind()
+    purrr::list_rbind(names_to = names_to)
   
 }
 

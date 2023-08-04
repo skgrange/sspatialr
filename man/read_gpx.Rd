@@ -8,6 +8,7 @@ read_gpx(
   file,
   transform = TRUE,
   creator = FALSE,
+  names_to = rlang::zap(),
   verbose = FALSE,
   progress = TRUE
 )
@@ -19,6 +20,9 @@ read_gpx(
 distance if the file contains the appropriate variables?}
 
 \item{creator}{Should the \code{creator} variable be extracted from the file?}
+
+\item{names_to}{An optional variable name for file name in the returned 
+tibble.}
 
 \item{verbose}{Should the function give messages?}
 
