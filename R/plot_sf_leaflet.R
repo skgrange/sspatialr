@@ -52,6 +52,8 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
     plot <- leaflet::addPolygons(plot, popup = popup_object)
   }
   
+  # leaflet::addRasterImage(sf)
+  
   return(plot)
   
 }

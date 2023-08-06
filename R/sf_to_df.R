@@ -11,7 +11,7 @@
 sf_to_df <- function(sf) {
   
   # Logic depends on geometry type
-  if (sf_class(sf) %in% c("point", "multipoint")) {
+  if (sf_class(sf) %in% c("point", "multipoint", "linestring")) {
     
     # Keep non-spatial variables
     df_non_spatial <- sf::st_drop_geometry(sf) %>% 
