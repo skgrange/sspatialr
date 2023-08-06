@@ -21,6 +21,9 @@ ra_read(file, variable = NA, layers = NULL)
 Function to read a raster data file as a \strong{terra} \code{SpatRaster} 
 object.
 }
+\seealso{
+\code{\link{ra_read_nested}}
+}
 \author{
 Stuart K. Grange
 }

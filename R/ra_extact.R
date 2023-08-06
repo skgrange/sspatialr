@@ -7,12 +7,16 @@
 #' 
 #' @param sf_points A \strong{sf} points object. 
 #' 
+#' @param drop_ids Should identifiers from the raster object (\code{cell_number} 
+#' and \code{layer}) be dropped from the return? 
+#' 
 #' @param na.rm Should missing values in the \code{ra} object be removed? 
 #' 
 #' @param verbose Should the function give messages?
 #' 
 #' @export
-ra_extact <- function(ra, sf_points, na.rm = FALSE, verbose = FALSE) {
+ra_extact <- function(ra, sf_points, drop_ids = FALSE, na.rm = FALSE, 
+                      verbose = FALSE) {
   
   # Check inputs
   stopifnot(
@@ -21,21 +25,27 @@ ra_extact <- function(ra, sf_points, na.rm = FALSE, verbose = FALSE) {
       sf_class(sf_points) == "point"
   )
   
+  # A message to the user
+  if (verbose) {
+    cli::cli_alert_info("{threadr::cli_date()} Extracting values from raster object...")
+  }
+  
   # Get dates and create a tibble for joining, when there are additional 
   # dimensions the dates are duplicated
   date <- unique(terra::time(ra))
   df_dates <- tibble(layer = seq_along(date), date)
   
   # Extract values from raster object, one row for each row of sf_points
-  if (verbose) {
-    cli::cli_alert_info("{threadr::cli_date()} Extracting values from raster object...")
-  }
-  
-  df <- ra_extract_and_clean(ra, sf_points, df_dates, verbose)
+  df <- ra_extract_and_clean(ra, sf_points, df_dates)
   
   # Drop missing values
   if (na.rm) {
     df <- filter(df, !is.na(value))
+  }
+  
+  # Drop raster ids if desired
+  if (drop_ids) {
+    df <- select(df, -cell_number, -layer)
   }
   
   return(df)
@@ -43,12 +53,7 @@ ra_extact <- function(ra, sf_points, na.rm = FALSE, verbose = FALSE) {
 }
 
 
-ra_extract_and_clean <- function(ra, sf_points, df_dates, verbose) {
-  
-  # Keep non-spatial variables
-  df_points <- sf_points %>% 
-    sf::st_drop_geometry() %>% 
-    tibble::rowid_to_column("id")
+ra_extract_and_clean <- function(ra, sf_points, df_dates) {
   
   # Extract the values for each point
   df <- terra::extract(
@@ -59,14 +64,14 @@ ra_extract_and_clean <- function(ra, sf_points, df_dates, verbose) {
     ID = TRUE, 
     cells = TRUE
   ) %>% 
-    rename(id = ID,
+    rename(id_sf = ID,
            cell_number = cell) %>% 
-    mutate(across(c(id, cell_number), as.integer)) %>% 
+    mutate(across(c(id_sf, cell_number), as.integer)) %>% 
     as_tibble()
   
   # What rows/points have no data returned?
   index_all_missing <- apply(
-    select(df, -id, -cell_number), 1, function(x) all(is.na(x))
+    select(df, -id_sf, -cell_number), 1, function(x) all(is.na(x))
   )
   
   # Return empty tibble if no data are returned
@@ -74,14 +79,10 @@ ra_extract_and_clean <- function(ra, sf_points, df_dates, verbose) {
     return(tibble())
   }
   
-  if (verbose) {
-    cli::cli_alert_info("{threadr::cli_date()} Formatting extracted data...")
-  }
-  
   # Drop missing points and make longer
   df_long <- df %>% 
     filter(!index_all_missing) %>% 
-    tidyr::pivot_longer(-c(id, cell_number), names_to = "name")
+    tidyr::pivot_longer(-c(id_sf, cell_number), names_to = "name")
   
   # Separate the variables
   n_name_delim <- stringr::str_count(df_long$name[1], "_")
@@ -102,12 +103,11 @@ ra_extract_and_clean <- function(ra, sf_points, df_dates, verbose) {
       )
   }
   
-  # Final cleaning
+  # Join dates and arrange variables
   df_long <- df_long %>% 
     mutate(layer = as.integer(layer)) %>% 
     left_join(df_dates, by = join_by(layer))  %>% 
-    left_join(df_points, by = join_by(id)) %>% 
-    relocate(names(df_points),
+    relocate(id_sf,
              cell_number,
              layer, 
              variable,

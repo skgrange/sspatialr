@@ -4,10 +4,14 @@
 \alias{ra_read_nested}
 \title{Function to read a raster file in a nested tibble.}
 \usage{
-ra_read_nested(file)
+ra_read_nested(file, verbose = FALSE, progress = FALSE)
 }
 \arguments{
-\item{file}{Raster file name to read.}
+\item{file}{A vector of raster files name to read.}
+
+\item{verbose}{Should the function give messages?}
+
+\item{progress}{Should a progress bar be displayed?}
 }
 \value{
 Nested tibble grouped by rows.
@@ -16,7 +20,7 @@ Nested tibble grouped by rows.
 Function to read a raster file in a nested tibble.
 }
 \seealso{
-[ra_read()]
+\code{\link{ra_read}}
 }
 \author{
 Stuart K. Grange

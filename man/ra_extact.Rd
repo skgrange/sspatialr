@@ -5,12 +5,15 @@
 \title{Function to extract values from a \strong{terra} \code{SpatRaster} object for
 \strong{sf} points.}
 \usage{
-ra_extact(ra, sf_points, na.rm = FALSE, verbose = FALSE)
+ra_extact(ra, sf_points, drop_ids = FALSE, na.rm = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{ra}{A \code{SpatRaster} object.}
 
 \item{sf_points}{A \strong{sf} points object.}
+
+\item{drop_ids}{Should identifiers from the raster object (\code{cell_number} 
+and \code{layer}) be dropped from the return?}
 
 \item{na.rm}{Should missing values in the \code{ra} object be removed?}
 

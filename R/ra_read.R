@@ -11,10 +11,12 @@
 #' 
 #' @return \code{SpatRaster} object.
 #' 
+#' @seealso \code{\link{ra_read_nested}}
+#' 
 #' @export
 ra_read <- function(file, variable = NA, layers = NULL) {
   
-  # Switch varaible input for all variables
+  # Switch variable input for all variables
   if (is.na(variable[1])) variable <- 0L
   
   # Read file
@@ -29,14 +31,36 @@ ra_read <- function(file, variable = NA, layers = NULL) {
 #' 
 #' @author Stuart K. Grange
 #' 
-#' @param file Raster file name to read. 
+#' @param file A vector of raster files name to read. 
+#' 
+#' @param verbose Should the function give messages? 
+#' 
+#' @param progress Should a progress bar be displayed? 
 #' 
 #' @return Nested tibble grouped by rows. 
 #' 
-#' @seealso [ra_read()]
+#' @seealso \code{\link{ra_read}}
 #' 
 #' @export
-ra_read_nested <- function(file) {
+ra_read_nested <- function(file, verbose = FALSE, progress = FALSE) {
+  
+  file %>% 
+    purrr::map(
+      ra_read_nested_worker, verbose = verbose, .progress = progress
+    ) %>% 
+    purrr::list_rbind() %>% 
+    rowwise(file,
+            variable)
+  
+}
+
+
+ra_read_nested_worker <- function(file, verbose) {
+  
+  # A message to the user
+  if (verbose) {
+    cli::cli_alert_info("{threadr::cli_date()} Reading `{file}`...")
+  }
   
   # Load entire file
   ra <- terra::rast(file)
@@ -52,9 +76,7 @@ ra_read_nested <- function(file) {
     file = file,
     variable = variables,
     raster = list_raster
-  ) %>% 
-    rowwise(file,
-            variable)
+  )
   
   return(df_nest)
   
