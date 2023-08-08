@@ -30,7 +30,7 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
       popup_object <- NULL
     } else {
       popup_object <- leafpop::popupTable(
-        popup_object, row.numbers = FALSE, feature.id = FALSE
+        sf, zcol = names(popup_object), row.numbers = FALSE, feature.id = FALSE
       )
     }
     
