@@ -1,7 +1,7 @@
 Package: sspatialr
 Type: Package
 Title: Tools To Make Working With R and Spatial Data Easier
-Version: 0.1.008
+Version: 0.1.009
 Date: 2023-08-09
 Authors@R: person("Stuart K.", "Grange", email = "stuart.grange@york.ac.uk", 
     role = c("cre", "aut"), comment = c(ORCID = "0000-0003-4093-3596"))

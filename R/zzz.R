@@ -8,7 +8,7 @@ if (getRversion() >= "2.15.1") {
   variables <- c(
     ".", "rowid", "time", "distance", "time_lag", "latitude", "longitude", 
     "ID", "cell", "id_sf", "cell_number", "name", "layer", "variable", "value",
-    "raster", "geom", "part", "hole", "x"
+    "raster", "geom", "part", "hole", "x", "distance_sum"
   )
   
   # Squash the notes
