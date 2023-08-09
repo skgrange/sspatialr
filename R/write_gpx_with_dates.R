@@ -60,12 +60,13 @@ build_gpx_entry <- function(latitude, longitude, date, ...) {
 
 
 gpx_preamble_tags <- '<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<gpx version="1.1" creator="gissr http://www.gpsvisualizer.com/" 
+<gpx version="1.1" creator="sspatialr http://www.gpsvisualizer.com/" 
 xmlns="http://www.topografix.com/GPX/1/1" 
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
 <trk>
-<name>gissr export</name>
+<name>sspatialr export</name>
 <trkseg>'
+
 
 gpx_trailing_tags <- '</trkseg>\n</trk>\n</gpx>'
