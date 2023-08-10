@@ -4,10 +4,16 @@
 \alias{ra_to_df}
 \title{Function to transform a raster object to a tibble.}
 \usage{
-ra_to_df(ra)
+ra_to_df(ra, variable_as_date = FALSE, tz = "UTC")
 }
 \arguments{
 \item{ra}{A \strong{terra} \code{SpatRaster} object.}
+
+\item{variable_as_date}{If \code{ra}'s names represent dates, should the 
+dates be parsed and the variable renamed?}
+
+\item{tz}{If \code{variable_as_date} is \code{TRUE}, what time zone are the 
+dates stored in?}
 }
 \value{
 Tibble.
