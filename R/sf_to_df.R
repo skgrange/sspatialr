@@ -10,6 +10,13 @@
 #' @export
 sf_to_df <- function(sf) {
   
+  # Check if the sf is a geometry
+  if ("geometry" %in% sf_class(sf)) {
+    cli::cli_abort(
+      "The input is a collection of geometries, `sf_to_df` requires the same type of geometries."
+    )
+  }
+  
   # Logic depends on geometry type
   if (sf_class(sf) %in% c("point", "multipoint", "linestring")) {
     

@@ -13,7 +13,7 @@ sf_class <- function(sf, as_lower = TRUE) {
   
   # Get unique geometry classes as a character vector
   x <- sf %>% 
-    sf::st_geometry_type() %>% 
+    sf::st_geometry_type(by_geometry = FALSE) %>% 
     unique() %>% 
     as.character()
   
