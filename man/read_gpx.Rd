@@ -10,7 +10,7 @@ read_gpx(
   creator = FALSE,
   names_to = rlang::zap(),
   verbose = FALSE,
-  progress = TRUE
+  progress = FALSE
 )
 }
 \arguments{

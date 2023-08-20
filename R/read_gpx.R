@@ -20,7 +20,8 @@
 #' 
 #' @export
 read_gpx <- function(file, transform = TRUE, creator = FALSE, 
-                     names_to = rlang::zap(), verbose = FALSE, progress = TRUE) {
+                     names_to = rlang::zap(), verbose = FALSE, 
+                     progress = FALSE) {
   
   # Vectorise function
   file %>% 

@@ -30,13 +30,24 @@ ra_extact <- function(ra, sf_points, drop_ids = FALSE, na.rm = FALSE,
     cli::cli_alert_info("{threadr::cli_date()} Extracting values from raster object...")
   }
   
-  # Get dates and create a tibble for joining, when there are additional 
-  # dimensions the dates are duplicated
+  # Get dates
   date <- unique(terra::time(ra))
-  df_dates <- tibble(layer = seq_along(date), date)
+  
+  # Create a tibble for joining, when there are additional dimensions the dates
+  # are duplicated
+  if (!is.na(date[1])) {
+    df_dates <- tibble(layer = seq_along(date), date)
+  } else {
+    df_dates <- tibble()
+  }
   
   # Extract values from raster object, one row for each row of sf_points
   df <- ra_extract_and_clean(ra, sf_points, df_dates)
+  
+  # Return empty tibbles here
+  if (nrow(df) == 0L) {
+    return(df)
+  }
   
   # Drop missing values
   if (na.rm) {
@@ -45,7 +56,7 @@ ra_extact <- function(ra, sf_points, drop_ids = FALSE, na.rm = FALSE,
   
   # Drop raster ids if desired
   if (drop_ids) {
-    df <- select(df, -cell_number, -layer)
+    df <- select(df, -cell_number, -dplyr::matches("layer"))
   }
   
   return(df)
@@ -83,6 +94,12 @@ ra_extract_and_clean <- function(ra, sf_points, df_dates) {
   df_long <- df %>% 
     filter(!index_all_missing) %>% 
     tidyr::pivot_longer(-c(id_sf, cell_number), names_to = "name")
+  
+  # If there are no dates, return here
+  if (nrow(df_dates) == 0L) {
+    df_long <- rename(df_long, variable = name)
+    return(df_long)
+  }
   
   # Separate the variables
   n_name_delim <- stringr::str_count(df_long$name[1], "_")
