@@ -68,8 +68,13 @@ ra_read_nested_worker <- function(file, verbose) {
   # Get variables
   variables <- terra::varnames(ra)
   
-  # Put each variable into separate elements
-  list_raster <- purrr::map(variables, ~ra[.])
+  if (length(variables) == 1L) {
+    # If one variable/layer, just put it within a list
+    list_raster <- list(ra)
+  } else {
+    # Put each variable into separate elements
+    list_raster <- purrr::map(variables, ~ra[.])
+  }
   
   # Make a rowwise nested tibble
   df_nest <- tibble(

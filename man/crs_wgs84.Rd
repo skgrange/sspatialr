@@ -7,6 +7,7 @@
 \alias{crs_swiss_plus}
 \alias{crs_bng}
 \alias{crs_nztm}
+\alias{crs_with_prefix}
 \title{Built-in projection/coordinate reference system constants.}
 \format{
 An object of class \code{integer} of length 1.
@@ -29,6 +30,11 @@ crs_swiss_plus
 crs_bng
 
 crs_nztm
+
+crs_with_prefix(crs)
+}
+\arguments{
+\item{crs}{Coordinate reference system integer.}
 }
 \value{
 Integer with length of \code{1}.

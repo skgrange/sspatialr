@@ -2,6 +2,8 @@
 #' 
 #' @author Stuart K. Grange
 #' 
+#' @param crs Coordinate reference system integer. 
+#' 
 #' @seealso [func(st_crs)]
 #' 
 #' @return Integer with length of \code{1}.
@@ -28,3 +30,10 @@ crs_bng <- 27700L
 #' @rdname crs_wgs84
 #' @export
 crs_nztm <- 2193L
+
+
+#' @rdname crs_wgs84
+#' @export
+crs_with_prefix <- function(crs) {
+  stringr::str_c("epsg:", crs)
+}
