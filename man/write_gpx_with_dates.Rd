@@ -9,12 +9,14 @@ write_gpx_with_dates(df, file)
 \arguments{
 \item{df}{Data frame or tibble with at least these three variables: 
 \code{latitude}, \code{longitude}, and \code{date}. \code{date} also needs 
-to be of \code{POSIXct} type.}
+to be of \code{POSIXct} type. If variables with the names \code{elevation} or 
+\code{temperature} are included in \code{df}, these too will be added to the
+GPX file.}
 
 \item{file}{File name of GPX export.}
 }
 \value{
-Invisible GPX mark-up.
+Invisible, a GPX mark-up file.
 }
 \description{
 Function to export GPX files with a \code{time} (date) variable.

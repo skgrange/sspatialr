@@ -4,11 +4,13 @@
 #' 
 #' @param df Data frame or tibble with at least these three variables: 
 #' \code{latitude}, \code{longitude}, and \code{date}. \code{date} also needs 
-#' to be of \code{POSIXct} type.
+#' to be of \code{POSIXct} type. If variables with the names \code{elevation} or 
+#' \code{temperature} are included in \code{df}, these too will be added to the
+#' GPX file. 
 #' 
 #' @param file File name of GPX export. 
 #' 
-#' @return Invisible GPX mark-up.
+#' @return Invisible, a GPX mark-up file. 
 #' 
 #' @export
 write_gpx_with_dates <- function(df, file) {
@@ -20,8 +22,8 @@ write_gpx_with_dates <- function(df, file) {
   # Drop missing coordinates if they exist and raise a warning
   if (anyNA(c(df$latitude, df$longitude))) {
     df <- filter(df, !is.na(latitude), !is.na(longitude))
-    warning(
-      "Missing coordinates were detected and have been removed...", call. = FALSE
+    cli::cli_alert_info(
+      "Missing coordinates were detected and have been removed..."
     )
   }
   
@@ -30,8 +32,27 @@ write_gpx_with_dates <- function(df, file) {
     mutate(date = lubridate::with_tz(date, "UTC"),
            date = format(date, format = "%Y-%m-%dT%H:%M:%OS3Z"))
   
+  # Detect some extra variables
+  has_elevation <- "elevation" %in% names(df)
+  has_temperature <- "temperature" %in% names(df)
+  
+  # Check for missing values
+  if (has_elevation && anyNA(df$elevation)) {
+    cli::cli_abort("GPX files cannot contain missing `elevation` values.")
+  }
+  
+  if (has_temperature && anyNA(df$temperature)) {
+    cli::cli_abort("GPX files cannot contain missing `temperature` values.")
+  }
+  
   # Build the body of the gpx file
-  gpx_body <- purrr::pmap_chr(df, build_gpx_entry) %>% 
+  gpx_body <- df %>% 
+    purrr::pmap(
+      build_gpx_node, 
+      has_elevation = has_elevation, 
+      has_temperature = has_temperature
+    ) %>% 
+    purrr::flatten_chr() %>% 
     stringr::str_c(collapse = "\n")
   
   # Combine the different pieces
@@ -46,15 +67,47 @@ write_gpx_with_dates <- function(df, file) {
 }
 
 
-build_gpx_entry <- function(latitude, longitude, date, ...) {
+build_gpx_node <- function(latitude, longitude, date, elevation, 
+                           temperature, has_elevation, has_temperature) {
+  
+  # TODO: add heart rate too
   
   # Inspired by: 
   # https://stackoverflow.com/questions/51067311/r-convert-gps-to-gpx-with-timestamp
-  stringr::str_c(
-    '<trkpt lat="', latitude, 
-    '" lon="', longitude, 
-    '">\n<time>', date, "</time>\n</trkpt>"
+  
+  # Build the primary node with or without an elevation variable
+  if (has_elevation) {
+    x <- stringr::str_glue(
+      '<trkpt lat="{latitude}" lon="{longitude}">
+       <ele>{elevation}</ele>
+       <time>{date}</time>'
+    )
+  } else {
+    x <- stringr::str_glue(
+      '<trkpt lat="{latitude}" lon="{longitude}">
+       <time>{date}</time>'
+    )
+  }
+  
+  # Add temperature as an ns3 tag too
+  if (has_temperature) {
+    x <- stringr::str_glue(
+      "{x}
+         <extensions>
+           <ns3:TrackPointExtension>
+             <ns3:atemp>{temperature}</ns3:atemp>
+           </ns3:TrackPointExtension>
+         </extensions>"
+    )
+  }
+  
+  # Close the node
+  x <- stringr::str_glue(
+    "{x}
+    </trkpt>"
   )
+  
+  return(x)
   
 }
 
