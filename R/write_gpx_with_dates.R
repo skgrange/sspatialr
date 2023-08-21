@@ -19,6 +19,14 @@ write_gpx_with_dates <- function(df, file) {
   stopifnot(c("latitude", "longitude", "date") %in% names(df))
   stopifnot(lubridate::is.POSIXt(df$date))
   
+  # Control what the tibble contains
+  df <- df %>% 
+    select(date,
+           latitude,
+           longitude, 
+           dplyr::matches("elevation"),
+           dplyr::matches("temperature"))
+  
   # Drop missing coordinates if they exist and raise a warning
   if (anyNA(c(df$latitude, df$longitude))) {
     df <- filter(df, !is.na(latitude), !is.na(longitude))
@@ -32,7 +40,7 @@ write_gpx_with_dates <- function(df, file) {
     mutate(date = lubridate::with_tz(date, "UTC"),
            date = format(date, format = "%Y-%m-%dT%H:%M:%OS3Z"))
   
-  # Detect some extra variables
+  # Detect optional variables
   has_elevation <- "elevation" %in% names(df)
   has_temperature <- "temperature" %in% names(df)
   
@@ -79,13 +87,13 @@ build_gpx_node <- function(latitude, longitude, date, elevation,
   if (has_elevation) {
     x <- stringr::str_glue(
       '<trkpt lat="{latitude}" lon="{longitude}">
-       <ele>{elevation}</ele>
-       <time>{date}</time>'
+         <ele>{elevation}</ele>
+         <time>{date}</time>'
     )
   } else {
     x <- stringr::str_glue(
       '<trkpt lat="{latitude}" lon="{longitude}">
-       <time>{date}</time>'
+         <time>{date}</time>'
     )
   }
   
