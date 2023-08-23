@@ -43,7 +43,7 @@ Integer with length of \code{1}.
 Built-in projection/coordinate reference system constants.
 }
 \seealso{
-[func(st_crs)]
+\code{\link{st_transform}}, \code{\link{project}}
 }
 \author{
 Stuart K. Grange

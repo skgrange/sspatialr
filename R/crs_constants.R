@@ -4,7 +4,7 @@
 #' 
 #' @param crs Coordinate reference system integer. 
 #' 
-#' @seealso [func(st_crs)]
+#' @seealso \code{\link{st_transform}}, \code{\link{project}}
 #' 
 #' @return Integer with length of \code{1}.
 #' 
