@@ -21,9 +21,6 @@ ra_to_df <- function(ra, variable_as_date = FALSE, tz = "UTC") {
   # To terra's version of spatial points (a spat vector)
   ra <- terra::as.points(ra)
   
-  # To sf
-  # sf::st_as_sf(ra)
-  
   # Bind geom and values together in a tibble and do some minor cleaning
   df <- dplyr::bind_cols(
     terra::geom(ra),
@@ -39,7 +36,7 @@ ra_to_df <- function(ra, variable_as_date = FALSE, tz = "UTC") {
   df <- tidyr::pivot_longer(df, -c(geom, part, hole, x, y), names_to = "variable")
   
   # Parse dates and rename variable
-  if (variable_as_date && stringr::str_detect(df$variable[1], "^X")) {
+  if (variable_as_date) {
     df <- df %>% 
       rename(date = variable) %>% 
       mutate(date = stringr::str_remove(date, "^X"), 
