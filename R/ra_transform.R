@@ -23,7 +23,7 @@ ra_transform <- function(ra, crs) {
     )
     terra::crs(ra) <- crs_with_prefix(crs)
   } else {
-    ra <- terra::project(ra, to = crs_with_prefix(crs))
+    ra <- terra::project(ra, crs_with_prefix(crs))
   }
   
   return(ra)
