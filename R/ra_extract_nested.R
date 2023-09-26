@@ -22,7 +22,7 @@
 #' @seealso \code{\link{ra_read_nested}}, \code{\link{ra_extract}}
 #' 
 #' @export
-ra_extact_nested <- function(df_nest, sf_points, drop_ids = TRUE, na.rm = FALSE, 
+ra_extract_nested <- function(df_nest, sf_points, drop_ids = TRUE, na.rm = FALSE, 
                              verbose = FALSE, progress = FALSE) {
   
   # Check inputs
