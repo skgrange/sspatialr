@@ -7,7 +7,7 @@ contained in a nested tibble.}
 \usage{
 ra_extract_nested(
   df_nest,
-  sf_points,
+  sf,
   drop_ids = TRUE,
   na.rm = FALSE,
   verbose = FALSE,
@@ -17,7 +17,7 @@ ra_extract_nested(
 \arguments{
 \item{df_nest}{A nested tibble from \code{\link{ra_read_nested}}.}
 
-\item{sf_points}{A \strong{sf} points object.}
+\item{sf}{A \strong{sf} object.}
 
 \item{drop_ids}{Should identifiers from the raster object (\code{cell_number} 
 and \code{layer}) be dropped from the return?}

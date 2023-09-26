@@ -5,7 +5,7 @@
 #' 
 #' @param df_nest A nested tibble from \code{\link{ra_read_nested}}. 
 #' 
-#' @param sf_points A \strong{sf} points object. 
+#' @param sf A \strong{sf} object. 
 #' 
 #' @param drop_ids Should identifiers from the raster object (\code{cell_number} 
 #' and \code{layer}) be dropped from the return? 
@@ -22,8 +22,8 @@
 #' @seealso \code{\link{ra_read_nested}}, \code{\link{ra_extract}}
 #' 
 #' @export
-ra_extract_nested <- function(df_nest, sf_points, drop_ids = TRUE, na.rm = FALSE, 
-                             verbose = FALSE, progress = FALSE) {
+ra_extract_nested <- function(df_nest, sf, drop_ids = TRUE, na.rm = FALSE, 
+                              verbose = FALSE, progress = FALSE) {
   
   # Check inputs
   stopifnot(c("raster") %in% names(df_nest), inherits(df_nest, "rowwise_df"))
@@ -35,7 +35,7 @@ ra_extract_nested <- function(df_nest, sf_points, drop_ids = TRUE, na.rm = FALSE
     purrr::map(
       ~ra_extract(
         .,
-        sf_points = sf_points,
+        sf = sf,
         drop_ids = drop_ids, 
         na.rm = na.rm, 
         verbose = verbose
