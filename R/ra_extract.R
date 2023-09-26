@@ -5,7 +5,7 @@
 #' 
 #' @param ra A \code{SpatRaster} object.
 #' 
-#' @param sf_points A \strong{sf} points object. 
+#' @param sf A \strong{sf} object. \code{sf} can be points, lines, or polygons.
 #' 
 #' @param drop_ids Should identifiers from the raster object (\code{cell_number} 
 #' and \code{layer}) be dropped from the return? 
@@ -15,15 +15,11 @@
 #' @param verbose Should the function give messages?
 #' 
 #' @export
-ra_extact <- function(ra, sf_points, drop_ids = FALSE, na.rm = FALSE, 
+ra_extract <- function(ra, sf, drop_ids = FALSE, na.rm = FALSE, 
                       verbose = FALSE) {
   
   # Check inputs
-  stopifnot(
-    inherits(ra, "SpatRaster") & 
-      inherits(sf_points, "sf") &
-      sf_class(sf_points) == "point"
-  )
+  stopifnot(inherits(ra, "SpatRaster") & inherits(sf, "sf"))
   
   # A message to the user
   if (verbose) {
@@ -41,8 +37,8 @@ ra_extact <- function(ra, sf_points, drop_ids = FALSE, na.rm = FALSE,
     df_dates <- tibble()
   }
   
-  # Extract values from raster object, one row for each row of sf_points
-  df <- ra_extract_and_clean(ra, sf_points, df_dates)
+  # Extract values from raster object, one row for each row of sf
+  df <- ra_extract_and_clean(ra, sf, df_dates)
   
   # Return empty tibbles here
   if (nrow(df) == 0L) {
@@ -64,12 +60,12 @@ ra_extact <- function(ra, sf_points, drop_ids = FALSE, na.rm = FALSE,
 }
 
 
-ra_extract_and_clean <- function(ra, sf_points, df_dates) {
+ra_extract_and_clean <- function(ra, sf, df_dates) {
   
   # Extract the values for each point
   df <- terra::extract(
     ra, 
-    sf_points, 
+    sf, 
     fun = NULL, 
     method = "simple", 
     ID = TRUE, 

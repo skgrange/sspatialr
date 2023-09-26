@@ -19,7 +19,7 @@
 #' @return A nested tibble, \code{df_nest} with an additional \code{extract} 
 #' variable. 
 #' 
-#' @seealso \code{\link{ra_read_nested}}, \code{\link{ra_extact}}
+#' @seealso \code{\link{ra_read_nested}}, \code{\link{ra_extract}}
 #' 
 #' @export
 ra_extact_nested <- function(df_nest, sf_points, drop_ids = TRUE, na.rm = FALSE, 
@@ -33,7 +33,7 @@ ra_extact_nested <- function(df_nest, sf_points, drop_ids = TRUE, na.rm = FALSE,
   list_extract <- df_nest %>% 
     pull(raster) %>% 
     purrr::map(
-      ~ra_extact(
+      ~ra_extract(
         .,
         sf_points = sf_points,
         drop_ids = drop_ids, 
