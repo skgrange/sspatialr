@@ -14,6 +14,12 @@
 #' @export
 plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
   
+  # Keep the handling of raster objects simple for now
+  if (inherits(sf, "SpatRaster")) {
+    plot <- plot_sf_leaflet_raster_objects(sf)
+    return(plot)
+  }
+  
   # Transform projection system
   if (transform) {
     sf <- sf::st_transform(sf, crs = crs_wgs84)
@@ -52,8 +58,11 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
     plot <- leaflet::addPolygons(plot, popup = popup_object)
   }
   
-  # leaflet::addRasterImage(sf)
-  
   return(plot)
   
+}
+
+
+plot_sf_leaflet_raster_objects <- function(ra) {
+  terra::plet(ra, tiles = "Streets")
 }
