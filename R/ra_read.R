@@ -33,6 +33,15 @@ ra_read <- function(file, variable = NA, layers = NULL) {
 #' 
 #' @param file A vector of raster files name to read. 
 #' 
+#' @param separate_layers Should all the layers within a variable 
+#' (\strong{terra}'s \code{varname}) be read separately? Not usually desired for
+#' time series, but for some data sources the layers within a variable form 
+#' distinct variables. 
+#' 
+#' @param warn Should the function raise warnings? Lower-level GDAL warnings can
+#' be raised for myriad reasons, but they are often messages, and are not "true"
+#' warnings and therefore can be suppressed. 
+#' 
 #' @param verbose Should the function give messages? 
 #' 
 #' @param progress Should a progress bar be displayed? 
@@ -42,11 +51,16 @@ ra_read <- function(file, variable = NA, layers = NULL) {
 #' @seealso \code{\link{ra_read}}
 #' 
 #' @export
-ra_read_nested <- function(file, verbose = FALSE, progress = FALSE) {
+ra_read_nested <- function(file, separate_layers = FALSE, warn = TRUE, 
+                           verbose = FALSE, progress = FALSE) {
   
   file %>% 
     purrr::map(
-      ra_read_nested_worker, verbose = verbose, .progress = progress
+      ra_read_nested_worker, 
+      separate_layers = separate_layers,
+      warn = warn,
+      verbose = verbose, 
+      .progress = progress
     ) %>% 
     purrr::list_rbind() %>% 
     rowwise(file,
@@ -55,18 +69,31 @@ ra_read_nested <- function(file, verbose = FALSE, progress = FALSE) {
 }
 
 
-ra_read_nested_worker <- function(file, verbose) {
+ra_read_nested_worker <- function(file, separate_layers, warn, verbose) {
   
   # A message to the user
   if (verbose) {
     cli::cli_alert_info("{threadr::cli_date()} Reading `{file}`...")
   }
   
-  # Load entire file
-  ra <- terra::rast(file)
+  # Load entire file, warnings can be raised for all sorts of low-level reasons
+  # but can be not raised if desired
+  if (warn) {
+    ra <- terra::rast(file)
+  } else {
+    ra <- rast_quiet(file)$result
+  }
   
-  # Get variables
-  variables <- terra::varnames(ra)
+  # Get variable names
+  if (!separate_layers) {
+    # Just the variables
+    variables <- terra::varnames(ra)
+  } else {
+    # If the layers are to be read individually too, not usually wanted for 
+    # time series data but different layers can exist in any given `varname` that
+    # form separate variables
+    variables <- names(ra)
+  }
   
   if (length(variables) == 1L) {
     # If one variable/layer, just put it within a list
@@ -86,3 +113,6 @@ ra_read_nested_worker <- function(file, verbose) {
   return(df_nest)
   
 }
+
+
+rast_quiet <- purrr::quietly(terra::rast)

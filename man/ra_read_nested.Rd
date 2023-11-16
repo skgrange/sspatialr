@@ -4,10 +4,25 @@
 \alias{ra_read_nested}
 \title{Function to read a raster file in a nested tibble.}
 \usage{
-ra_read_nested(file, verbose = FALSE, progress = FALSE)
+ra_read_nested(
+  file,
+  separate_layers = FALSE,
+  warn = TRUE,
+  verbose = FALSE,
+  progress = FALSE
+)
 }
 \arguments{
 \item{file}{A vector of raster files name to read.}
+
+\item{separate_layers}{Should all the layers within a variable 
+(\strong{terra}'s \code{varname}) be read separately? Not usually desired for
+time series, but for some data sources the layers within a variable form 
+distinct variables.}
+
+\item{warn}{Should the function raise warnings? Lower-level GDAL warnings can
+be raised for myriad reasons, but they are often messages, and are not "true"
+warnings and therefore can be suppressed.}
 
 \item{verbose}{Should the function give messages?}
 
