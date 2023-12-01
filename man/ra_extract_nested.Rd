@@ -9,6 +9,7 @@ ra_extract_nested(
   df_nest,
   sf,
   drop_ids = TRUE,
+  warn = TRUE,
   na.rm = FALSE,
   verbose = FALSE,
   progress = FALSE
@@ -21,6 +22,10 @@ ra_extract_nested(
 
 \item{drop_ids}{Should identifiers from the raster object (\code{cell_number} 
 and \code{layer}) be dropped from the return?}
+
+\item{warn}{Should the function raise warnings? Lower-level GDAL warnings can
+be raised for myriad reasons, but they are often messages, and are not "true"
+warnings and therefore can be suppressed.}
 
 \item{na.rm}{Should missing values in the \code{ra} object be removed?}
 

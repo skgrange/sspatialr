@@ -12,10 +12,18 @@
 #' 
 #' @param na.rm Should missing values in the \code{ra} object be removed? 
 #' 
+#' @param warn Should the function raise warnings? Lower-level GDAL warnings can
+#' be raised for myriad reasons, but they are often messages, and are not "true"
+#' warnings and therefore can be suppressed. 
+#' 
 #' @param verbose Should the function give messages?
 #' 
+#' @return Tibble. 
+#' 
+#' @seealso \code{\link{ra_read}}, \code{\link{ra_extract_nested}}
+#' 
 #' @export
-ra_extract <- function(ra, sf, drop_ids = FALSE, na.rm = FALSE, 
+ra_extract <- function(ra, sf, drop_ids = FALSE, warn = TRUE, na.rm = FALSE, 
                       verbose = FALSE) {
   
   # Check inputs
@@ -38,7 +46,7 @@ ra_extract <- function(ra, sf, drop_ids = FALSE, na.rm = FALSE,
   }
   
   # Extract values from raster object, one row for each row of sf
-  df <- ra_extract_and_clean(ra, sf, df_dates)
+  df <- ra_extract_and_clean(ra, sf, df_dates, warn)
   
   # Return empty tibbles here
   if (nrow(df) == 0L) {
@@ -60,17 +68,31 @@ ra_extract <- function(ra, sf, drop_ids = FALSE, na.rm = FALSE,
 }
 
 
-ra_extract_and_clean <- function(ra, sf, df_dates) {
+ra_extract_and_clean <- function(ra, sf, df_dates, warn) {
   
   # Extract the values for each point
-  df <- terra::extract(
-    ra, 
-    sf, 
-    fun = NULL, 
-    method = "simple", 
-    ID = TRUE, 
-    cells = TRUE
-  ) %>% 
+  if (warn) {
+    df <- terra::extract(
+      ra, 
+      sf, 
+      fun = NULL, 
+      method = "simple", 
+      ID = TRUE, 
+      cells = TRUE
+    )
+  } else {
+    df <- extract_quiet(
+      ra, 
+      sf, 
+      fun = NULL, 
+      method = "simple", 
+      ID = TRUE, 
+      cells = TRUE
+    )$result
+  }
+  
+  # Format the return a bit
+  df <- df %>% 
     rename(id_sf = ID,
            cell_number = cell) %>% 
     mutate(across(c(id_sf, cell_number), as.integer)) %>% 
@@ -131,3 +153,6 @@ ra_extract_and_clean <- function(ra, sf, df_dates) {
   return(df_long)
   
 }
+
+
+extract_quiet <- purrr::quietly(terra::extract)

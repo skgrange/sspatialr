@@ -5,7 +5,14 @@
 \title{Function to extract values from a \strong{terra} \code{SpatRaster} object for
 \strong{sf} points.}
 \usage{
-ra_extract(ra, sf, drop_ids = FALSE, na.rm = FALSE, verbose = FALSE)
+ra_extract(
+  ra,
+  sf,
+  drop_ids = FALSE,
+  warn = TRUE,
+  na.rm = FALSE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{ra}{A \code{SpatRaster} object.}
@@ -15,13 +22,23 @@ ra_extract(ra, sf, drop_ids = FALSE, na.rm = FALSE, verbose = FALSE)
 \item{drop_ids}{Should identifiers from the raster object (\code{cell_number} 
 and \code{layer}) be dropped from the return?}
 
+\item{warn}{Should the function raise warnings? Lower-level GDAL warnings can
+be raised for myriad reasons, but they are often messages, and are not "true"
+warnings and therefore can be suppressed.}
+
 \item{na.rm}{Should missing values in the \code{ra} object be removed?}
 
 \item{verbose}{Should the function give messages?}
 }
+\value{
+Tibble.
+}
 \description{
 Function to extract values from a \strong{terra} \code{SpatRaster} object for
 \strong{sf} points.
+}
+\seealso{
+\code{\link{ra_read}}, \code{\link{ra_extract_nested}}
 }
 \author{
 Stuart K. Grange
