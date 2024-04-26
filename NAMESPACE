@@ -2,6 +2,7 @@
 
 export("%>%")
 export(add_daytime)
+export(calculate_sunlight_times)
 export(coords_to_wkt)
 export(crs_bng)
 export(crs_nztm)
