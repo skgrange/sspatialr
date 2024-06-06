@@ -81,7 +81,7 @@ ra_read_nested_worker <- function(file, separate_layers, warn, verbose) {
   if (warn) {
     ra <- terra::rast(file)
   } else {
-    ra <- rast_quiet(file)$result
+    suppressWarnings(ra <- terra::rast(file))
   }
   
   # Get variable names
@@ -113,6 +113,3 @@ ra_read_nested_worker <- function(file, separate_layers, warn, verbose) {
   return(df_nest)
   
 }
-
-
-rast_quiet <- purrr::quietly(terra::rast)
