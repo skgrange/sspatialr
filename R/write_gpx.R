@@ -23,6 +23,13 @@ write_gpx <- function(sf, file, transform = FALSE) {
       "Polygons are not supported by GPX, polygons have been coerced to lines..."
     )
     sf <- sf::st_cast(sf, "LINESTRING", warn = FALSE)
+  } else if (sf_class(sf) == "multipolygon") {
+    cli::cli_alert_info(
+      "Multi polygons are not supported by GPX, polygons have been coerced to lines..."
+    )
+    sf <- sf %>% 
+      sf::st_cast("POLYGON", warn = FALSE) %>% 
+      sf::st_cast("LINESTRING", warn = FALSE)
   }
   
   # Export gpx file
