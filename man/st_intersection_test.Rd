@@ -11,7 +11,7 @@ st_intersection_test(x, y)
 if the features in \code{x} intersect with any feature in \code{y}.}
 }
 \value{
-Logical vector the length of \code{x}.
+Logical vector with the length of \code{x}.
 }
 \description{
 Function to test if \code{sf} objects intersect with one another.

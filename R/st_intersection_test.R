@@ -5,7 +5,7 @@
 #' @param x,y \code{sf} objects to test. \code{st_intersection_test} will test 
 #' if the features in \code{x} intersect with any feature in \code{y}. 
 #' 
-#' @return Logical vector the length of \code{x}. 
+#' @return Logical vector with the length of \code{x}.
 #' 
 #' @export
 st_intersection_test <- function(x, y) {
