@@ -57,14 +57,14 @@ sf_from_df <- function(df, geometry_type = "points",
     df, coords = coords, crs = crs, sf_column_name = geometry_name
   )
   
-  if (geometry_type == "lines") {
+  if (geometry_type %in% c("line", "lines")) {
     # Promote to lines
     sf <- sf %>% 
       group_by(across(dplyr::all_of(by))) %>% 
       summarise(do_union = FALSE,
                 .groups = "drop") %>% 
       st_cast("LINESTRING")
-  } else if (geometry_type == "polygons") {
+  } else if (geometry_type %in% c("polygon", "polygons")) {
     # Promote to polygons
     sf <- sf %>% 
       group_by(across(dplyr::all_of(by))) %>% 

@@ -5,10 +5,13 @@
 \title{Function to transform a \strong{sf} spatial object to a "long" data 
 frame/tibble.}
 \usage{
-sf_to_df(sf)
+sf_to_df(sf, rename = FALSE)
 }
 \arguments{
 \item{sf}{A \strong{sf} spatial object.}
+
+\item{rename}{Should the generic \code{"x"} and \code{"y"} names be renamed
+to \code{"longitude"} and \code{"latitude"}?}
 }
 \value{
 Tibble.

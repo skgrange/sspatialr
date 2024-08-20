@@ -5,10 +5,13 @@
 #' 
 #' @param sf A \strong{sf} spatial object. 
 #' 
+#' @param rename Should the generic \code{"x"} and \code{"y"} names be renamed
+#' to \code{"longitude"} and \code{"latitude"}? 
+#' 
 #' @return Tibble. 
 #' 
 #' @export
-sf_to_df <- function(sf) {
+sf_to_df <- function(sf, rename = FALSE) {
   
   # Check if the sf is a geometry
   if ("geometry" %in% sf_class(sf)) {
@@ -48,6 +51,10 @@ sf_to_df <- function(sf) {
     
   } else {
     df <- sf_to_df_beyond_points(sf)
+  }
+  
+  if (rename) {
+    df <- rename(df, longitude = x, latitude = y)
   }
   
   return(df)
