@@ -10,11 +10,15 @@
 #' @param drop_ids Should identifiers from the raster object (\code{cell_number} 
 #' and \code{layer}) be dropped from the return? 
 #' 
+#' @param na.rm Should missing values in the \code{ra} object be removed? 
+#' 
+#' @param recover_dates If a date variable (or in \strong{terra}'s nomenclature, 
+#' \code{time}) is missing, should an attempt be made to recover the dates from
+#' the object's names? 
+#' 
 #' @param warn Should the function raise warnings? Lower-level GDAL warnings can
 #' be raised for myriad reasons, but they are often messages, and are not "true"
 #' warnings and therefore can be suppressed. 
-#' 
-#' @param na.rm Should missing values in the \code{ra} object be removed? 
 #' 
 #' @param verbose Should the function give messages?
 #' 
@@ -26,8 +30,9 @@
 #' @seealso \code{\link{ra_read_nested}}, \code{\link{ra_extract}}
 #' 
 #' @export
-ra_extract_nested <- function(df_nest, sf, drop_ids = TRUE, warn = TRUE, 
-                              na.rm = FALSE, verbose = FALSE, progress = FALSE) {
+ra_extract_nested <- function(df_nest, sf, drop_ids = TRUE, na.rm = FALSE, 
+                              recover_dates = FALSE, warn = TRUE,
+                              verbose = FALSE, progress = FALSE) {
   
   # Check inputs
   stopifnot(c("raster") %in% names(df_nest), inherits(df_nest, "rowwise_df"))
@@ -43,6 +48,7 @@ ra_extract_nested <- function(df_nest, sf, drop_ids = TRUE, warn = TRUE,
         drop_ids = drop_ids, 
         warn = warn,
         na.rm = na.rm, 
+        recover_dates = recover_dates,
         verbose = verbose
       ),
       .progress = progress

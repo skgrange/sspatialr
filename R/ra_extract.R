@@ -12,6 +12,10 @@
 #' 
 #' @param na.rm Should missing values in the \code{ra} object be removed? 
 #' 
+#' @param recover_dates If a date variable (or in \strong{terra}'s nomenclature, 
+#' \code{time}) is missing, should an attempt be made to recover the dates from
+#' the object's names? 
+#' 
 #' @param warn Should the function raise warnings? Lower-level GDAL warnings can
 #' be raised for myriad reasons, but they are often messages, and are not "true"
 #' warnings and therefore can be suppressed. 
@@ -24,7 +28,7 @@
 #' 
 #' @export
 ra_extract <- function(ra, sf, drop_ids = FALSE, warn = TRUE, na.rm = FALSE, 
-                      verbose = FALSE) {
+                       recover_dates = FALSE, verbose = FALSE) {
   
   # Check inputs
   stopifnot(inherits(ra, "SpatRaster") & inherits(sf, "sf"))
@@ -32,6 +36,38 @@ ra_extract <- function(ra, sf, drop_ids = FALSE, warn = TRUE, na.rm = FALSE,
   # A message to the user
   if (verbose) {
     cli::cli_alert_info("{threadr::cli_date()} Extracting values from raster object...")
+  }
+  
+  # Apply logic to extract date from the new era5 netcdf files
+  if (recover_dates && !terra::has.time(ra)) {
+    
+    # Get date from names
+    date <- ra %>% 
+      terra::names() %>% 
+      stringr::str_split_fixed("=", n = 2) %>% 
+      .[, 2] %>% 
+      as.numeric() %>% 
+      threadr::parse_unix_time()
+    
+    # Add dates to raster object
+    terra::time(ra) <- date
+    
+    # Extract names and add prefix to make the names consistent with the older
+    # files
+    variable_with_layer <- ra %>% 
+      terra::names() %>% 
+      stringr::str_split_fixed("_", 2) %>% 
+      .[, 1] %>% 
+      tibble(variable = .) %>% 
+      group_by(variable) %>% 
+      mutate(layer = 1:dplyr::n(),
+             variable_with_layer = stringr::str_c(variable, "_", layer)) %>% 
+      ungroup() %>% 
+      pull(variable_with_layer)
+    
+    # Set names
+    names(ra) <- variable_with_layer
+    
   }
   
   # Get dates
@@ -46,9 +82,9 @@ ra_extract <- function(ra, sf, drop_ids = FALSE, warn = TRUE, na.rm = FALSE,
   }
   
   # Extract values from raster object, one row for each row of sf
-  df <- ra_extract_and_clean(ra, sf, df_dates, warn)
+  df <- ra_extract_and_clean(ra, sf, df_dates, warn = warn)
   
-  # Return empty tibbles here
+  # Return an empty tibble here if no values were extracted
   if (nrow(df) == 0L) {
     return(df)
   }

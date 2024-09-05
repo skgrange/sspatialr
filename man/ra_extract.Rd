@@ -11,6 +11,7 @@ ra_extract(
   drop_ids = FALSE,
   warn = TRUE,
   na.rm = FALSE,
+  recover_dates = FALSE,
   verbose = FALSE
 )
 }
@@ -27,6 +28,10 @@ be raised for myriad reasons, but they are often messages, and are not "true"
 warnings and therefore can be suppressed.}
 
 \item{na.rm}{Should missing values in the \code{ra} object be removed?}
+
+\item{recover_dates}{If a date variable (or in \strong{terra}'s nomenclature, 
+\code{time}) is missing, should an attempt be made to recover the dates from
+the object's names?}
 
 \item{verbose}{Should the function give messages?}
 }

@@ -9,8 +9,9 @@ ra_extract_nested(
   df_nest,
   sf,
   drop_ids = TRUE,
-  warn = TRUE,
   na.rm = FALSE,
+  recover_dates = FALSE,
+  warn = TRUE,
   verbose = FALSE,
   progress = FALSE
 )
@@ -23,11 +24,15 @@ ra_extract_nested(
 \item{drop_ids}{Should identifiers from the raster object (\code{cell_number} 
 and \code{layer}) be dropped from the return?}
 
+\item{na.rm}{Should missing values in the \code{ra} object be removed?}
+
+\item{recover_dates}{If a date variable (or in \strong{terra}'s nomenclature, 
+\code{time}) is missing, should an attempt be made to recover the dates from
+the object's names?}
+
 \item{warn}{Should the function raise warnings? Lower-level GDAL warnings can
 be raised for myriad reasons, but they are often messages, and are not "true"
 warnings and therefore can be suppressed.}
-
-\item{na.rm}{Should missing values in the \code{ra} object be removed?}
 
 \item{verbose}{Should the function give messages?}
 
