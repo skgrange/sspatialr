@@ -131,7 +131,7 @@ ra_extract_and_clean <- function(ra, sf, df_dates, warn) {
   df <- df %>% 
     rename(id_sf = ID,
            cell_number = cell) %>% 
-    mutate(across(c(id_sf, cell_number), as.integer)) %>% 
+    mutate(across(c(id_sf, cell_number), as.numeric)) %>% 
     as_tibble()
   
   # What rows/points have no data returned?
