@@ -47,7 +47,7 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
   # Set-up the start of the map
   plot <- sf %>% 
     leaflet::leaflet() %>% 
-    leaflet::addTiles()
+    leaflet::addTiles(options = leaflet::tileOptions(maxZoom = 20))
   
   # Add the specific layers based on the geometry type
   if (any(sf_class(sf) %in% c("point", "multipoint"))) {
