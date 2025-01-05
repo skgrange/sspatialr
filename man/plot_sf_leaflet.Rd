@@ -4,7 +4,7 @@
 \alias{plot_sf_leaflet}
 \title{Function to plot spatial objects with an interactive \strong{leaflet} plot.}
 \usage{
-plot_sf_leaflet(sf, popup = TRUE, transform = TRUE)
+plot_sf_leaflet(sf, popup = TRUE, transform = TRUE, hill_shading = FALSE)
 }
 \arguments{
 \item{sf}{A \strong{sf} spatial object.}
@@ -13,6 +13,8 @@ plot_sf_leaflet(sf, popup = TRUE, transform = TRUE)
 
 \item{transform}{Should the projection system be transformed to WGS84 before
 plotting?}
+
+\item{hill_shading}{Should a transparent hill shading layer be added too?}
 }
 \value{
 Leaflet map/plot.

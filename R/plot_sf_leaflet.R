@@ -9,10 +9,13 @@
 #' @param transform Should the projection system be transformed to WGS84 before
 #' plotting? 
 #' 
+#' @param hill_shading Should a transparent hill shading layer be added too? 
+#' 
 #' @return Leaflet map/plot. 
 #' 
 #' @export
-plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
+plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE, 
+                            hill_shading = FALSE) {
   
   # Keep the handling of raster objects simple for now
   if (inherits(sf, "SpatRaster")) {
@@ -56,6 +59,15 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE) {
     plot <- leaflet::addPolylines(plot, popup = popup_object)
   } else if (any(sf_class(sf) %in% c("polygon", "multipolygon"))) {
     plot <- leaflet::addPolygons(plot, popup = popup_object)
+  }
+  
+  # Add hill shading if desired
+  if (hill_shading) {
+    plot <- plot %>% 
+      leaflet::addProviderTiles(
+        "Esri.WorldShadedRelief",
+        options = leaflet::providerTileOptions(opacity = 0.3, maxZoom = 13)
+      )
   }
   
   return(plot)
