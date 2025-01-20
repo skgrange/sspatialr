@@ -7,9 +7,12 @@
 \alias{crs_swiss_plus}
 \alias{crs_bng}
 \alias{crs_nztm}
+\alias{crs_gda_94}
 \alias{crs_with_prefix}
 \title{Built-in projection/coordinate reference system constants.}
 \format{
+An object of class \code{integer} of length 1.
+
 An object of class \code{integer} of length 1.
 
 An object of class \code{integer} of length 1.
@@ -30,6 +33,8 @@ crs_swiss_plus
 crs_bng
 
 crs_nztm
+
+crs_gda_94
 
 crs_with_prefix(crs)
 }
