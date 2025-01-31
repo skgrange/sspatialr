@@ -16,6 +16,11 @@
 #' \code{time}) is missing, should an attempt be made to recover the dates from
 #' the object's names? 
 #' 
+#' @param search_radius When \code{sf} are points, what is the maximum distance
+#' (in metres) to search for a non-missing cell in \code{ra}? A \code{distance}
+#' variable will also be returned if the value of \code{search_radius} is 
+#' greater-than zero.
+#' 
 #' @param warn Should the function raise warnings? Lower-level GDAL warnings can
 #' be raised for myriad reasons, but they are often messages, and are not "true"
 #' warnings and therefore can be suppressed. 
@@ -28,7 +33,7 @@
 #' 
 #' @export
 ra_extract <- function(ra, sf, drop_ids = FALSE, warn = TRUE, na.rm = FALSE, 
-                       recover_dates = FALSE, verbose = FALSE) {
+                       recover_dates = FALSE, search_radius = 0, verbose = FALSE) {
   
   # Check inputs
   stopifnot(inherits(ra, "SpatRaster") & inherits(sf, "sf"))
@@ -82,7 +87,7 @@ ra_extract <- function(ra, sf, drop_ids = FALSE, warn = TRUE, na.rm = FALSE,
   }
   
   # Extract values from raster object, one row for each row of sf
-  df <- ra_extract_and_clean(ra, sf, df_dates, warn = warn)
+  df <- ra_extract_and_clean(ra, sf, df_dates, search_radius, warn = warn)
   
   # Return an empty tibble here if no values were extracted
   if (nrow(df) == 0L) {
@@ -104,35 +109,41 @@ ra_extract <- function(ra, sf, drop_ids = FALSE, warn = TRUE, na.rm = FALSE,
 }
 
 
-ra_extract_and_clean <- function(ra, sf, df_dates, warn) {
+ra_extract_and_clean <- function(ra, sf, df_dates, search_radius, warn) {
   
-  # Extract the values for each point
+  # Extract the values for each point, a matrix or an array is always returned
+  # because of the different return when using `search_radius`
   if (warn) {
-    df <- terra::extract(
+    matrix_extract <- terra::extract(
       ra, 
       sf, 
       fun = NULL, 
       method = "simple", 
       ID = TRUE, 
-      cells = TRUE
+      cells = TRUE,
+      raw = TRUE,
+      search_radius = search_radius
     )
   } else {
-    df <- extract_quiet(
+    matrix_extract <- extract_quiet(
       ra, 
       sf, 
       fun = NULL, 
       method = "simple", 
       ID = TRUE, 
-      cells = TRUE
+      cells = TRUE,
+      raw = TRUE,
+      search_radius = search_radius
     )$result
   }
   
-  # Format the return a bit
-  df <- df %>% 
+  # Push return to a tibble and Format the return a bit
+  df <- matrix_extract %>% 
+    data.frame() %>% 
+    as_tibble() %>% 
     rename(id_sf = ID,
            cell_number = cell) %>% 
-    mutate(across(c(id_sf, cell_number), as.numeric)) %>% 
-    as_tibble()
+    mutate(across(c(id_sf, cell_number), as.numeric))
   
   # What rows/points have no data returned?
   index_all_missing <- apply(
@@ -147,7 +158,14 @@ ra_extract_and_clean <- function(ra, sf, df_dates, warn) {
   # Drop missing points and make longer
   df_long <- df %>% 
     filter(!index_all_missing) %>% 
-    tidyr::pivot_longer(-c(id_sf, cell_number), names_to = "name")
+    tidyr::pivot_longer(
+      -c(id_sf, cell_number, dplyr::matches("distance")), names_to = "name"
+    )
+  
+  # Relocate distance variable if it exists
+  if ("distance" %in% names(df_long)) {
+    df_long <- relocate(df_long, distance, .after = cell_number)
+  }
   
   # If there are no dates, return here
   if (nrow(df_dates) == 0L) {
@@ -180,6 +198,7 @@ ra_extract_and_clean <- function(ra, sf, df_dates, warn) {
     left_join(df_dates, by = join_by(layer))  %>% 
     relocate(id_sf,
              cell_number,
+             dplyr::matches("distance"), 
              layer, 
              variable,
              dplyr::matches("dimension"), 

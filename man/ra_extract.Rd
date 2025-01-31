@@ -12,6 +12,7 @@ ra_extract(
   warn = TRUE,
   na.rm = FALSE,
   recover_dates = FALSE,
+  search_radius = 0,
   verbose = FALSE
 )
 }
@@ -32,6 +33,11 @@ warnings and therefore can be suppressed.}
 \item{recover_dates}{If a date variable (or in \strong{terra}'s nomenclature, 
 \code{time}) is missing, should an attempt be made to recover the dates from
 the object's names?}
+
+\item{search_radius}{When \code{sf} are points, what is the maximum distance
+(in metres) to search for a non-missing cell in \code{ra}? A \code{distance}
+variable will also be returned if the value of \code{search_radius} is 
+greater-than zero.}
 
 \item{verbose}{Should the function give messages?}
 }
