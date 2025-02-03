@@ -39,6 +39,11 @@ crs_gda_94 <- 28356L
 
 #' @rdname crs_wgs84
 #' @export
+crs_gda_2020 <- 7844L
+
+
+#' @rdname crs_wgs84
+#' @export
 crs_with_prefix <- function(crs) {
   stringr::str_c("epsg:", crs)
 }

@@ -23,6 +23,25 @@ plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE,
     return(plot)
   }
   
+  # What type of geometries are in the object? 
+  geometry_types <- unique(as.character(sf::st_geometry_type(sf)))
+  
+  # Error when multiple geometries are present
+  if (length(geometry_types) != 1L) {
+    cli::cli_abort("`sf` object contains more than one geometry type `{geometry_types}`.")
+  }
+  
+  # Test for empty geometries
+  is_empty <- sf::st_is_empty(sf)
+  
+  # Drop empty geometries
+  if (any(is_empty)) {
+    cli::cli_alert_warning(
+      "Empty geometries detected, removing them for plotting..."
+    )
+    sf <- filter(sf, !is_empty)
+  }
+  
   # Transform projection system
   if (transform) {
     sf <- sf::st_transform(sf, crs = crs_wgs84)
