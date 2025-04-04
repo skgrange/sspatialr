@@ -17,6 +17,11 @@
 plot_sf_leaflet <- function(sf, popup = TRUE, transform = TRUE, 
                             hill_shading = FALSE) {
   
+  # Error when zero geometries are passed
+  if (nrow(sf) == 0L) {
+    cli::cli_abort("`sf` object contains no geometries.")
+  }
+  
   # Keep the handling of raster objects simple for now
   if (inherits(sf, "SpatRaster")) {
     plot <- plot_sf_leaflet_raster_objects(sf)
