@@ -61,7 +61,7 @@ read_gpx_worker <- function(file, transform, creator, verbose) {
   xml_tree <- XML::htmlTreeParse(text_gpx, useInternalNodes = TRUE)
   
   # Extended file version
-  # For garmin watches
+  # For garmin watches and some other data sources like strava
   gpx_extended <- any(stringr::str_detect(text_gpx[1:10], "TrackPointExtension"))
   gpx_extended <- if_else(is.na(gpx_extended), FALSE, TRUE)
   
@@ -87,8 +87,11 @@ read_gpx_worker <- function(file, transform, creator, verbose) {
     as.numeric()
   
   # When there is no elevation data
-  if (length(elevation) == 0L) elevation <- NA_real_
+  if (length(elevation) == 0L) {
+    elevation <- NA_real_
+  }
   
+  # Dates are specified to be UTC in gpx file
   date <- xml_tree %>% 
     XML::xpathSApply(path = "//trkpt/time", XML::xmlValue) %>% 
     lubridate::ymd_hms(tz = "UTC")
@@ -104,24 +107,41 @@ read_gpx_worker <- function(file, transform, creator, verbose) {
       XML::xpathSApply(path = "//cad", XML::xmlValue) %>% 
       as.numeric()
     
+    power <- xml_tree %>% 
+      XML::xpathSApply(path = "//power", XML::xmlValue) %>% 
+      as.numeric()
+    
     # Catches if the extended gps values do not contain such values
-    if (length(heart_rate) == 0) heart_rate <- NA_real_
-    if (length(cadence) == 0) cadence <- NA_real_
+    if (length(heart_rate) == 0L) {
+      heart_rate <- NA_real_
+    }
+    
+    if (length(cadence) == 0L) {
+      cadence <- NA_real_
+    }
+    
+    if (length(power) == 0L) {
+      power <- NA_real_
+    }
     
   }
-
-  if (length(date) != 0) {
+  
+  if (length(date) != 0L) {
     
     # Build tibble
     if (creator) {
-      df <- tibble(creator = creator_string, date, elevation, latitude, longitude)
+      df <- tibble(
+        creator = creator_string, date, elevation, latitude, longitude
+      )
     } else {
       df <- tibble(date, elevation, latitude, longitude)
     }
     
     # Add extensions too
     if (gpx_extended) {
-      df <- mutate(df, heart_rate = !!heart_rate, cadence = !!cadence)
+      df <- mutate(
+        df, heart_rate = !!heart_rate, cadence = !!cadence, power = !!power
+      )
     }
     
     # Calculate things, needs date

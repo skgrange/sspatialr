@@ -37,5 +37,5 @@ Function to create a mesh or grid of polygons to cover an sf object,
 typically a larger polygon.
 }
 \seealso{
-\code{\link{st_make_grid}}
+\code{\link[sf]{st_make_grid}}
 }

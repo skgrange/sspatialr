@@ -18,8 +18,8 @@ Tibble, \code{df} with an additional \code{daytime} variable.
 }
 \description{
 The sunrise and sunset calculations are done by \strong{suncalc}'s 
-\code{\link{getSunlightTimes}} function.
+\code{\link[suncalc]{getSunlightTimes}} function.
 }
 \seealso{
-\code{\link{getSunlightTimes}}
+\code{\link[suncalc]{getSunlightTimes}}
 }

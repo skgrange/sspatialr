@@ -14,8 +14,8 @@ calculate_sunlight_times(df)
 Tibble.
 }
 \description{
-The calculations are done the \code{\link{getSunlightTimes}} function in the 
-\strong{suncalc} package.
+The calculations are done the \code{\link[suncalc]{getSunlightTimes}} 
+function in the \strong{suncalc} package.
 }
 \examples{
 
@@ -29,5 +29,5 @@ calculate_sunlight_times(data_mapping)
 
 }
 \seealso{
-\code{\link{getSunlightTimes}}
+\code{\link[suncalc]{getSunlightTimes}}
 }

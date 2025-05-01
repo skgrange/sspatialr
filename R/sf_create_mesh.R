@@ -17,7 +17,7 @@
 #' 
 #' @return A \code{sf} object of polygon geometry type.
 #' 
-#' @seealso \code{\link{st_make_grid}}
+#' @seealso \code{\link[sf]{st_make_grid}}
 #' 
 #' @export
 sf_create_mesh <- function(sf, cellsize = NA, n = 10, hexagonal = TRUE,

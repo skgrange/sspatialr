@@ -53,7 +53,7 @@ Integer with length of \code{1}.
 Built-in projection/coordinate reference system constants.
 }
 \seealso{
-\code{\link{st_transform}}, \code{\link{project}}
+\code{\link[sf]{st_transform}}, \code{\link[terra]{project}}
 }
 \author{
 Stuart K. Grange

@@ -1,7 +1,7 @@
 #' Function to calculate daytimes and add a \code{daytime} variable to a tibble.
 #' 
 #' The sunrise and sunset calculations are done by \strong{suncalc}'s 
-#' \code{\link{getSunlightTimes}} function.
+#' \code{\link[suncalc]{getSunlightTimes}} function.
 #' 
 #' @param df Input tibble to be transformed. \code{df} must contain
 #' \code{date}, \code{latitude}, and \code{longitude} variables. The 
@@ -11,7 +11,7 @@
 #' 
 #' @return Tibble, \code{df} with an additional \code{daytime} variable. 
 #' 
-#' @seealso \code{\link{getSunlightTimes}}
+#' @seealso \code{\link[suncalc]{getSunlightTimes}}
 #' 
 #' @export
 add_daytime <- function(df, as_factor = FALSE) {

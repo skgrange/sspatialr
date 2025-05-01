@@ -1,14 +1,14 @@
 #' Function to calculate sunlight times. 
 #' 
-#' The calculations are done the \code{\link{getSunlightTimes}} function in the 
-#' \strong{suncalc} package.
+#' The calculations are done the \code{\link[suncalc]{getSunlightTimes}} 
+#' function in the \strong{suncalc} package.
 #' 
 #' @param df Input data frame or tibble with \code{date}, \code{latitude}, and 
 #' \code{longitude} variables.
 #' 
 #' @return Tibble. 
 #' 
-#' @seealso \code{\link{getSunlightTimes}}
+#' @seealso \code{\link[suncalc]{getSunlightTimes}}
 #' 
 #' @examples
 #' 
