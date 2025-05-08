@@ -18,6 +18,6 @@ A \strong{terra} raster object.
 Function to project a \strong{terra} raster object's CRS projection system.
 }
 \seealso{
-\code{\link{project}}, \code{\link{st_transform}}, 
+\code{\link[terra]{project}}, \code{\link[sf]{st_transform}}, 
 \code{\link{crs_wgs84}}
 }

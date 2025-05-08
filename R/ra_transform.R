@@ -6,7 +6,7 @@
 #' 
 #' @return A \strong{terra} raster object. 
 #' 
-#' @seealso \code{\link{project}}, \code{\link{st_transform}}, 
+#' @seealso \code{\link[terra]{project}}, \code{\link[sf]{st_transform}}, 
 #' \code{\link{crs_wgs84}}
 #' 
 #' @export
