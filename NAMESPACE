@@ -3,6 +3,7 @@
 export("%>%")
 export(add_daytime)
 export(calculate_sunlight_times)
+export(clean_file_metadata_coordinates)
 export(coords_to_wkt)
 export(crs_bng)
 export(crs_gda_2020)
