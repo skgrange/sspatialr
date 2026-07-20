@@ -76,15 +76,19 @@ read_gpx_worker <- function(file, transform, creator, verbose) {
   }
   
   # Get latitude and longitude
-  latitude <- coordinates["lat", ] %>% 
-    as.numeric()
-  
-  longitude <- coordinates["lon", ] %>% 
-    as.numeric()
+  latitude <- as.numeric(coordinates["lat", ])
+  longitude <- as.numeric(coordinates["lon", ])
   
   elevation <- xml_tree %>% 
     XML::xpathSApply(path = "//trkpt/ele", XML::xmlValue) %>% 
     as.numeric()
+  
+  # If elevation has a different length from the coordinates, raise a warning
+  # and make missing
+  if (!identical(length(latitude), length(elevation))) {
+    cli::cli_warn("Elevation has incorrect length, returning `NA` for elevation...")
+    elevation <- NA_real_
+  }
   
   # When there is no elevation data
   if (length(elevation) == 0L) {
@@ -186,20 +190,16 @@ extract_creator_string <- function(text, n = 10) {
   
   # Format
   if (index_creator == 1L) {
-    
     creator_string <- creator_string %>% 
       stringr::str_remove_all('creator|=|"') %>% 
       stringr::str_trim()
-    
   } else {
-    
     # Split and format
     creator_string <- creator_string %>% 
       stringr::str_split_fixed("creator|version|xmlns", n = 5) %>% 
       .[, index_creator_location] %>% 
       stringr::str_remove_all('=|"') %>% 
       stringr::str_trim()
-    
   }
   
   return(creator_string)
