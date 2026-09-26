@@ -34,6 +34,7 @@ export(sf_class)
 export(sf_create_bounding_box)
 export(sf_create_mesh)
 export(sf_end_point)
+export(sf_extreme_points)
 export(sf_from_df)
 export(sf_start_point)
 export(sf_to_df)
@@ -49,29 +50,31 @@ export(write_gpx)
 export(write_gpx_with_dates)
 export(write_shapefile)
 import(sf)
-importFrom(dplyr,across)
-importFrom(dplyr,arrange)
-importFrom(dplyr,as_tibble)
-importFrom(dplyr,between)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,distinct)
-importFrom(dplyr,do)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,if_else)
-importFrom(dplyr,inner_join)
-importFrom(dplyr,join_by)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename)
-importFrom(dplyr,rowwise)
-importFrom(dplyr,select)
-importFrom(dplyr,slice)
-importFrom(dplyr,summarise)
-importFrom(dplyr,sym)
-importFrom(dplyr,tibble)
-importFrom(dplyr,ungroup)
+importFrom(dplyr,
+  across,
+  arrange,
+  as_tibble,
+  between,
+  bind_rows,
+  distinct,
+  do,
+  everything,
+  filter,
+  group_by,
+  if_else,
+  inner_join,
+  join_by,
+  left_join,
+  mutate,
+  pull,
+  relocate,
+  rename,
+  rowwise,
+  select,
+  slice,
+  summarise,
+  sym,
+  tibble,
+  ungroup
+)
 importFrom(magrittr,"%>%")

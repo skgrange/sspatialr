@@ -52,7 +52,7 @@ get_osm_boundary_worker <- function(id, sleep, verbose) {
   
   # Get wkt
   text <- tryCatch({
-    threadr::read_lines(url)
+    readr::read_lines(url, progress = FALSE)
   }, error = function(e) {
     cli::cli_alert_info("{threadr::cli_date()} `{url}` returned no data...")
     NULL
