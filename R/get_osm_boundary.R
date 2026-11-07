@@ -26,13 +26,13 @@ get_osm_boundary <- function(id, sleep = 1, verbose = FALSE, progress = FALSE) {
   
   # Do, use bind_rows for sf objects, passing id rather than url because it is
   # used within the worker
-  id %>% 
+  id |> 
     purrr::map(
-      ~get_osm_boundary_worker(
-        ., sleep = sleep, verbose = verbose
+      \(x) get_osm_boundary_worker(
+        id = x, sleep = sleep, verbose = verbose
       ),
       .progress = progress
-    ) %>% 
+    ) |> 
     bind_rows()
   
 }
@@ -52,17 +52,17 @@ get_osm_boundary_worker <- function(id, sleep, verbose) {
   
   # Get wkt
   text <- tryCatch({
-    readr::read_lines(url, progress = FALSE)
+    readLines(url, warn = FALSE)
   }, error = function(e) {
     cli::cli_alert_info("{threadr::cli_date()} `{url}` returned no data...")
     NULL
   })
   
   # Parse wkt and add id
-  sf <- text %>% 
-    sf::st_as_sfc() %>% 
-    sf::st_sf() %>% 
-    mutate(id = !!as.integer(id)) %>% 
+  sf <- text |> 
+    sf::st_as_sfc() |> 
+    sf::st_sf() |> 
+    mutate(id = !!as.integer(id)) |> 
     relocate(id)
   
   # Sleep if needed
